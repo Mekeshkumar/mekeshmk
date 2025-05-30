@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hospital Invoice</title>
+  <style>
+    :root {
+      --primary-blue: #1faacd;
+      --white: #ffffff;
+      --secondary-green: #4e7a9a;
+      --accent-orange: #f38c38;
+      --light-blue: #a3cbd4;
+      --charcoal: #2f3e59;
+    }
+
+    html {
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--white);
+      color: var(--charcoal);
+      margin: 0;
+      padding: 0;
+    }
+
+    .text-right { text-align: right; }
+    .text-bold { font-weight: bold; }
+    .text-center { text-align: center; }
+    .currency { font-weight: bold; margin-right: 2px; }
+
+    .invoice-container {
+      width: 800px;
+      margin: 30px auto;
+      background-color: var(--white);
+      padding: 30px;
+      border: 1px solid var(--light-blue);
+      box-shadow: 0 8px 16px rgba(31, 170, 205, 0.2);
+      border-radius: 12px;
+    }
+
+    /* Logo as background image */
+    .logo {
+      width: 150px;
+      height: 80px;
+      margin: 0 auto 10px;
+      background-image: url('static/logo.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    h2 {
+      color: var(--primary-blue);
+      margin: 10px 0 5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    td, th {
+      border: 1px solid var(--light-blue);
+      padding: 10px;
+    }
+
+    th {
+      background-color: var(--primary-blue);
+      color: var(--white);
+      text-align: left;
+    }
+
+    .info-table td {
+      background-color: #f9fcfd;
+    }
+
+    h3 {
+      margin-top: 40px;
+      color: var(--secondary-green);
+    }
+
+    h4 {
+      color: var(--primary-blue);
+      margin-top: 30px;
+    }
+
+    .summary-table td:first-child {
+      background-color: var(--light-blue);
+    }
+
+    .summary-table td:last-child {
+      background-color: #eaf5f7;
+    }
+
+    .accent {
+      color: var(--accent-orange);
+      font-weight: bold;
+    }
+
+    .signature-section {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 40px;
+    }
+
+    .signature-section div {
+      text-align: center;
+      padding: 10px;
+      width: 45%;
+      border-top: 2px solid var(--primary-blue);
+    }
+
+    .footer {
+      margin-top: 50px;
+      font-size: 0.9rem;
+      color: var(--charcoal);
+      border-top: 1px solid var(--light-blue);
+      padding-top: 10px;
+    }
+
+    /* QR code as background image */
+    .qr {
+      width: 100px;
+      height: 100px;
+      float: right;
+      margin-top: -90px;
+      border: 1px solid var(--light-blue);
+      background-color: var(--white);
+      border-radius: 8px;
+
+      background-image: url('static/QR.jpg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .print-btn {
+      margin: 20px 0;
+      background-color: var(--primary-blue);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .print-btn:hover {
+      background-color: var(--secondary-green);
+    }
+
+    @media print {
+      .invoice-container {
+        box-shadow: none;
+        border: none;
+      }
+
+      .qr, .print-btn {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .invoice-container {
+        width: 95%;
+        padding: 20px;
+      }
+
+      table, thead, tbody, th, td, tr {
+        display: block;
+        width: 100%;
+      }
+
+      td, th {
+        text-align: left;
+        padding: 8px;
+      }
+
+      .qr {
+        float: none;
+        display: block;
+        margin: 20px auto;
+      }
+
+      .signature-section {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .signature-section div {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<section class="invoice-container">
+
+  <!-- Print Button -->
+  <button class="print-btn" onclick="window.print()">Print Invoice</button>
+
+  <!-- Header -->
+  <header class="text-center">
+    <div class="logo"></div>
+    <h2>MediCare Hospital</h2>
+    <p>
+      123 Wellness Street, Cityville, ST 45678<br>
+      Phone: +1 (123) 456-7890 | Email: <a href="mailto:billing@medicare.com">billing@medicare.com</a><br>
+      Website: <a href="https://www.medicarehospital.com" target="_blank">www.medicarehospital.com</a> | GSTIN: 27AAACI1234Z1Z5
+    </p>
+  </header>
+
+  <!-- Invoice Info -->
+  <table class="info-table">
+    <tr>
+      <td><strong>Invoice #:</strong> INV-2025-00123</td>
+      <td><strong>Invoice Date:</strong> 29-May-2025</td>
+      <td><strong>Due Date:</strong> 12-Jun-2025</td>
+      <td><strong>Payment Terms:</strong> Net 15 Days</td>
+    </tr>
+  </table>
+
+  <!-- Patient Info -->
+  <article>
+    <table class="info-table">
+      <tr>
+        <td><strong>Patient ID:</strong> P100234</td>
+        <td><strong>Full Name:</strong> John Doe</td>
+      </tr>
+      <tr>
+        <td><strong>Date of Birth:</strong> 01-Jan-1985</td>
+        <td><strong>Contact:</strong> +1 987-654-3210 | john@example.com</td>
+      </tr>
+      <tr>
+        <td colspan="2"><strong>Address:</strong> 789 Health Lane, Wellness City, ST 45678</td>
+      </tr>
+    </table>
+  </article>
+
+  <!-- Services -->
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Description of Service</th>
+        <th>Code</th>
+        <th>Qty</th>
+        <th>Unit Price</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>25-May-2025</td>
+        <td>General Consultation</td>
+        <td>CONS001</td>
+        <td class="text-right">1</td>
+        <td class="text-right"><span class="currency">₹</span>500.00</td>
+        <td class="text-right"><span class="currency">₹</span>500.00</td>
+      </tr>
+      <tr>
+        <td>26-May-2025</td>
+        <td>X-Ray - Chest</td>
+        <td>XR001</td>
+        <td class="text-right">1</td>
+        <td class="text-right"><span class="currency">₹</span>800.00</td>
+        <td class="text-right"><span class="currency">₹</span>800.00</td>
+      </tr>
+      <tr>
+        <td>27-May-2025</td>
+        <td>Blood Test - CBC</td>
+        <td>BT002</td>
+        <td class="text-right">1</td>
+        <td class="text-right"><span class="currency">₹</span>300.00</td>
+        <td class="text-right"><span class="currency">₹</span>300.00</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Summary -->
+  <table class="summary-table">
+    <tr>
+      <td class="text-right text-bold">Subtotal:</td>
+      <td class="text-right"><span class="currency">₹</span>1,600.00</td>
+    </tr>
+    <tr>
+      <td class="text-right text-bold">GST (18%):</td>
+      <td class="text-right"><span class="currency">₹</span>288.00</td>
+    </tr>
+    <tr>
+      <td class="text-right text-bold">Insurance Adjustment:</td>
+      <td class="text-right">-<span class="currency">₹</span>500.00</td>
+    </tr>
+    <tr>
+      <td class="text-right text-bold">Total Amount Due:</td>
+      <td class="text-right text-bold accent"><span class="currency">₹</span>1,388.00</td>
+    </tr>
+  </table>
+
+  <!-- Payment Info -->
+  <h3>Payment Information</h3>
+  <p><strong>Accepted Methods:</strong> UPI, Bank Transfer, Credit/Debit Card</p>
+  <p><strong>Bank Details:</strong> MediCare Hospital, HDFC Bank, A/C: 1234567890, IFSC: HDFC0001234</p>
+  <p><strong>Payment Instructions:</strong> Mention Invoice # when paying.<br> For UPI, use UPI ID: medicare@hdfcbank or scan the QR code.</p>
+  <div class="qr" title="Scan to pay via UPI using MediCare Hospital QR code"></div>
+
+  <!-- Legal -->
+  <h4>Legal & Compliance</h4>
+  <p><strong>GSTIN:</strong> 27AAACI1234Z1Z5</p>
+  <p><strong>Terms:</strong> Payment due within 15 days. No refunds after services rendered. Subject to local jurisdiction.</p>
+  <p><strong>Confidentiality:</strong> Patient records are confidential and protected by law.</p>
+
+  <!-- Signature -->
+  <div class="signature-section">
+    <div><strong>Authorized Signature</strong><br>_____________________________</div>
+    <div><strong>Hospital Stamp</strong><br>_____________________________</div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer text-center">
+    For queries, contact us at <a href="mailto:billing@medicare.com">billing@medicare.com</a> or +1 123-456-7890<br>
+    <strong>Thank you for choosing MediCare Hospital!</strong>
+  </footer>
+
+</section>
+
+</body>
+</html>

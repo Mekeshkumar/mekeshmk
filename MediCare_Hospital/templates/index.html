@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="MediCare Hospital Billing System - Streamline patient billing with an intuitive web interface." />
+    <meta name="author" content="MediCare Hospital Billing Team" />
+
+    <title>MediCare Billing System</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="https://img.icons8.com/?size=100&id=woOAI2jTY4Ot&format=png&color=000000" type="image/png" />
+
+    <!-- Theme color for mobile address bar -->
+    <meta name="theme-color" content="#1976d2" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/billing.css" />
+
+    <!-- Performance Preconnect -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+
+    <style>
+        .btn-login,
+        .btn-register,
+        .btn-primary-custom,
+        .btn-outline-custom {
+            padding: 0.5rem 1.25rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+        }
+
+        .btn-primary-custom {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        /* Add hover state for outline button */
+        .btn-outline-custom {
+            border: 2px solid #007bff;
+            color: #007bff;
+            background-color: transparent;
+        }
+
+        .btn-outline-custom:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .hero-headline {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #003366;
+            animation: fadeIn 1s;
+        }
+
+        .hero-subheadline {
+            font-size: 1.125rem;
+            color: #555;
+            animation: fadeIn 1.5s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .quick-access-card {
+            padding: 1.5rem;
+            border-radius: 1rem;
+            background-color: #f8f9fa;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .quick-access-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .quick-access-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-card {
+            padding: 1.25rem;
+            border-radius: 1rem;
+            background-color: #f0f4f8;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+
+        .faq-icon {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer {
+            background-color: #003366;
+            color: #fff;
+            padding: 3rem 0;
+            position: relative; /* Sticky footer fix */
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .footer-links a {
+            display: block;
+            color: #ccc;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .social-icons a {
+            color: #fff;
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.875rem;
+        }
+
+        /* Snackbar for feedback */
+        .snackbar {
+            display: none; /* Hidden by default */
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 10000;
+        }
+        .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100vw;
+        background-color: #fff;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.5s;
+        opacity: 1;
+    }
+    .loading-overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+    .loading-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .loading-text {
+        font-size: larger;
+        font-weight: 500;
+        color: #1976d2;
+        margin-top: 1.5rem;
+    }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Overlay -->
+    <div id="loader" style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            background-color: #ffffff;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        ">
+        <div id="loader" class="loading-overlay" role="status" aria-live="polite" aria-label="Loading">
+            <div class="loading-content">
+                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" aria-hidden="true"></div>
+                <div class="loading-text">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-white shadow-sm" role="navigation">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fa-solid fa-hospital" style="color: #74C0FC; font-size: 2rem; vertical-align: middle;"></i>
+                <span style="font-weight: bold; font-size: 1.5rem; color: #003366; margin-left: 0.5rem; vertical-align: middle;">
+                    MediCare Hospital
+                </span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto me-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About Billing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#faq">FAQ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact Us</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="login.html" class="btn btn-login btn-outline-primary me-2" aria-label="Log in">Log In</a>
+                    <a href="#" class="btn btn-register btn-primary" aria-label="Register">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Offset -->
+    <div style="padding-top: 80px;"></div>
+
+    <!-- Snackbar for feedback -->
+    <div id="snackbar" class="snackbar">Thank you for subscribing!</div>
+
+    <!-- Hero Section -->
+    <div class="container hero-section py-5">
+        <div class="row align-items-center">
+            <div class="col-12 col-md-6 hero-text">
+                <h1 class="hero-headline">Welcome to Your Secure Hospital Billing Portal</h1>
+                <p class="hero-subheadline">Easily view, download, and manage your medical bills online. Simple. Secure. Convenient.</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="login.html" class="btn btn-primary-custom btn-login">Log In to View Bills</a>
+                    <a href="#" class="btn btn-outline-custom">Register as New Patient</a>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 text-center mt-4 mt-md-0">
+                <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+                <dotlottie-player src="https://lottie.host/00409331-76fa-4bfa-9b31-a8a7b56406bd/stlS6YeDA2.lottie" background="transparent" speed="1" style="width: 100%; max-width: 450px; height: auto;" loop autoplay></dotlottie-player>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Access Section -->
+    <div class="container py-5">
+        <div class="row gy-4 text-center">
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="quick-access-card">
+                    <div class="quick-access-icon">🧑‍⚕️</div>
+                    <div class="quick-access-title">Patient Access</div>
+                    <div class="quick-access-desc">
+                        View and manage billing statements, make payments, and check insurance coverage.
+                    </div>
+                    <a href="/patient-access" class="btn btn-outline-custom w-100" aria-label="Go to Patient Portal">Go to Patient Portal</a>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="quick-access-card">
+                    <div class="quick-access-icon">🏥</div>
+                    <div class="quick-access-title">Hospital Staff</div>
+                    <div class="quick-access-desc">
+                        Tools for internal billing, patient account updates, and secure communication.
+                    </div>
+                    <a href="/hospital-staff" class="btn btn-outline-custom w-100" aria-label="Staff Dashboard">Staff Dashboard</a>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="quick-access-card">
+                    <div class="quick-access-icon">🧾</div>
+                    <div class="quick-access-title">Insurance Providers</div>
+                    <div class="quick-access-desc">
+                        Access claim submissions, approval workflows, and real-time patient data.
+                    </div>
+                    <a href="/insurance" class="btn btn-outline-custom w-100" aria-label="Insurance Access">Insurance Access</a>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="quick-access-card">
+                    <div class="quick-access-icon">📞</div>
+                    <div class="quick-access-title">Billing Support</div>
+                    <div class="quick-access-desc">
+                        Need help? Contact our billing team for personalized support and dispute resolution.
+                    </div>
+                    <a href="/support" class="btn btn-outline-custom w-100" aria-label="Contact Support">Contact Support</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="container py-5" id="faq">
+        <h2 class="text-center mb-5">Frequently Asked Questions</h2>
+        <div class="row g-4">
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="faq-card">
+                    <div class="faq-icon">💳</div>
+                    <div class="faq-title">How do I pay my bill?</div>
+                    <div class="faq-description">You can pay online using our secure portal, by phone, or through mail.</div>
+                    <a class="read-more" data-bs-toggle="collapse" href="#faq1" role="button">Read More</a>
+                    <div class="collapse mt-2" id="faq1">
+                        <p>Log in to your billing account, go to the "Payments" section, and choose your preferred payment method including credit card or bank transfer.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="faq-card">
+                    <div class="faq-icon">🛡️</div>
+                    <div class="faq-title">Will my insurance cover the treatment?</div>
+                    <div class="faq-description">Coverage depends on your provider and plan; we recommend checking beforehand.</div>
+                    <a class="read-more" data-bs-toggle="collapse" href="#faq2" role="button">Read More</a>
+                    <div class="collapse mt-2" id="faq2">
+                        <p>Please consult with your insurer or use our online estimator tool to determine what portion of your treatment is covered.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="faq-card">
+                    <div class="faq-icon">📞</div>
+                    <div class="faq-title">How can I contact billing support?</div>
+                    <div class="faq-description">Our support team is available Mon–Fri, 8am–6pm by phone or email.</div>
+                    <a class="read-more" data-bs-toggle="collapse" href="#faq3" role="button">Read More</a>
+                    <div class="collapse mt-2" id="faq3">
+                        <p>Call us at 1-800-555-1234 or email billing@hospital.org. We're here to help with any questions or disputes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <div class="footer-logo mb-2">MediCare</div>
+                    <p>Your trusted partner in digital healthcare billing solutions.</p>
+                    <div class="social-icons mt-3">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 footer-links">
+                    <h6>Quick Links</h6>
+                    <a href="#">About</a>
+                    <a href="#">Services</a>
+                    <a href="#">Contact</a>
+                    <a href="#faq">FAQs</a>
+                </div>
+                <div class="col-md-3">
+                    <h6>Contact Us</h6>
+                    <p>Email: medicare@support.com</p>
+                    <p>Phone: +91 123-4567-893</p>
+                </div>
+                <div class="col-md-3">
+                    <h6>Subscribe to our Newsletter</h6>
+                    <form id="newsletterForm">
+                        <div class="mb-3">
+                            <input type="email" class="form-control" id="newsletterEmail" placeholder="Enter your email" required aria-label="Email for newsletter subscription" />
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="copyright mt-5">
+                &copy; 2025 MediCare. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Optional: Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Font Awesome bundle -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+    <script>
+        // Show loader on page load and hide it after 5 seconds or when ready
+        document.addEventListener("DOMContentLoaded", function () {
+            // Disable scrolling
+            document.body.style.overflow = 'hidden';
+
+            setTimeout(function () {
+                hideLoader();
+            }, 500); // fallback in case page takes too long
+        });
+
+        function hideLoader() {
+            const loader = document.getElementById('loader');
+            if (loader) {
+                loader.style.opacity = '1';
+                loader.style.transition = 'opacity 0.5s';
+                loader.offsetHeight; // force reflow
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    document.body.style.overflow = '';
+                }, 300);
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Animate loader on navigation to login.html
+        document.querySelectorAll('a[href$="login.html"], a.btn-login').forEach(link => {
+            link.addEventListener('click', function (e) {
+                // Only animate for left click and no modifier keys
+                if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                e.preventDefault();
+                const href = this.getAttribute('href') || 'login.html';
+                const loader = document.getElementById('loader');
+                if (loader) {
+                    loader.style.display = 'flex';
+                    loader.style.opacity = '0';
+                    loader.offsetHeight; // force reflow
+                    loader.style.transition = 'opacity 0.5s';
+                    loader.style.opacity = '1';
+                    document.body.style.overflow = 'hidden';
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 100);
+                } else {
+                    window.location.href = href;
+                }
+            });
+        });
+
+        // Newsletter form submission handler
+        document.getElementById('newsletterForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const emailInput = document.getElementById('newsletterEmail');
+            const email = emailInput.value.trim();
+
+            if (!validateEmail(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            // Simulate submission (you can replace this with actual API call)
+            document.getElementById('snackbar').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('snackbar').style.display = 'none';
+            }, 3000); // Show feedback for 3 seconds
+
+            emailInput.value = '';
+        });
+
+        // Email validation function
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Smooth scroll for navbar links
+        document.querySelectorAll('a.nav-link[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').slice(1);
+                const target = document.getElementById(targetId);
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Optional: Collapse FAQ when another opens (Bootstrap handles this via data attributes)
+    </script>
+</body>
+
+</html>

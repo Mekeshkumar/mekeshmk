@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="MediCare Hospital Billing System - Streamline patient billing with an intuitive web interface." />
+    <meta name="author" content="MediCare Hospital Billing Team" />
+    <title>MediCare Billing System</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="https://img.icons8.com/?size=100&id=woOAI2jTY4Ot&format=png&color=000000" type="image/png" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body,
+        html {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(120deg, #e0ecff 0%, #f8fbff 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 950px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 12px 40px rgba(25, 118, 210, 0.10);
+            overflow: hidden;
+        }
+
+        .login-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 540px;
+        }
+
+        .left {
+            padding: 38px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            margin-bottom: 18px;
+            font-size: 1.3rem;
+            color: #1976d2;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e3f2fd;
+            margin-right: 6px;
+        }
+
+        .quote {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1976d2;
+        }
+
+        .welcome {
+            color: #666;
+            margin-bottom: 26px;
+            font-size: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            padding: 13px 14px;
+            border-radius: 10px;
+            border: 1px solid #b6c6e3;
+            background: #f7fbff;
+            font-size: 1rem;
+            outline: none;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #1976d2;
+            box-shadow: 0 0 0 2px #e3f2fd;
+        }
+
+        #togglePassword {
+            background: none;
+            border: none;
+            position: absolute;
+            right: 38px;
+            top: 185px;
+            cursor: pointer;
+            padding: 0;
+            color: #1976d2;
+            font-size: 1.1rem;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.92rem;
+            margin-top: 8px;
+        }
+
+        .remember-forgot label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            align-items: center;
+        }
+
+        .buttons .login {
+            flex: 1;
+            padding: 11px 0;
+            border-radius: 7px;
+            border: none;
+            font-weight: 600;
+            background: #1976d2;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .buttons .login:hover {
+            background: #125ea7;
+        }
+
+        #loading {
+            display: none;
+            color: #1976d2;
+            font-size: 0.95rem;
+            font-weight: 500;
+            align-self: center;
+        }
+
+        .policy {
+            font-size: 0.78rem;
+            margin-top: 18px;
+            color: #8a8a8a;
+        }
+
+        .policy a {
+            color: #1976d2;
+            text-decoration: underline;
+        }
+
+        .right {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f8ff;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                max-width: 98vw;
+            }
+
+            .login-wrapper {
+                min-height: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .login-wrapper {
+                grid-template-columns: 1fr;
+                min-height: 0;
+            }
+
+            .right {
+                height: 220px;
+            }
+
+            .left {
+                padding: 28px 12px;
+            }
+        }
+
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(25, 118, 210, 0.10);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            animation: fadeIn 0.3s;
+        }
+
+        .popup.hidden {
+            display: none;
+        }
+
+        .popup-content {
+            background: #fff;
+            padding: 26px 32px;
+            border-radius: 13px;
+            box-shadow: 0 8px 24px rgba(25, 118, 210, 0.13);
+            text-align: center;
+            animation: slideIn 0.35s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-24px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="login-page">
+            <div class="login-wrapper">
+                <div class="left">
+                    <div class="logo">
+                        <div class="logo-icon"></div>
+                        <i class="fa-solid fa-hospital-user" style="color: #74C0FC;"></i>
+                        MediCare Hospital Login
+                    </div>
+                    <div class="quote">Secure Access to Hospital Billing</div>
+                    <div class="welcome">Login to efficiently manage patient records, billing, and reports.</div>
+                    <form class="form-group" id="login-form">
+                        <input type="email" placeholder="Admin Email" id="email" name="email" required
+                            aria-label="Admin Email" />
+                        <input type="password" placeholder="Password" id="password" name="password" required
+                            aria-label="Password" />
+                        <button type="button" id="togglePassword" aria-label="Toggle Password Visibility">
+                            <i class="fas fa-eye" id="eyeIcon"></i>
+                        </button>
+                        <div class="remember-forgot">
+                            <label><input type="checkbox" name="remember" /> Remember me</label>
+                            <a href="#" style="color: #2196f3; text-decoration: none;">Forgot Password?</a>
+                        </div>
+                        <div class="buttons">
+                            <button type="submit" class="login">LOGIN</button>
+                            <span class="loading" id="loading">Loading...</span>
+                        </div>
+                        <div class="policy">
+                            By logging in, you agree to our <a href="#">Terms of Use</a> and <a href="#">Privacy
+                                Policy</a>.
+                        </div>
+                    </form>
+                </div>
+                <div class="right">
+                    <dotlottie-player src="https://lottie.host/ea363ad4-17c6-47cc-9678-ecae8021d0ed/zXTgYPgh7u.lottie"
+                        background="transparent" speed="1" style="width: 300px; height: 300px" loop
+                        autoplay></dotlottie-player>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Modal -->
+    <div id="popup" class="popup hidden">
+        <div class="popup-content">
+            <p id="popup-message">Message goes here</p>
+        </div>
+    </div>
+
+    <script>
+    const form = document.getElementById('login-form');
+    const popup = document.getElementById('popup');
+    const popupMessage = document.getElementById('popup-message');
+    const loading = document.getElementById('loading');
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        if (!email || !password) {
+            showPopup("Please enter both email and password.");
+            return;
+        }
+
+        loading.style.display = 'inline';
+        fetch('http://localhost:5000/login', { // updated port here
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password })
+        })
+            .then(res => res.json())
+            .then(data => {
+                loading.style.display = 'none';
+                if (data.success) {
+                    window.location.href = 'billing.html';
+                } else {
+                    showPopup(data.message || "Incorrect email or password.");
+                }
+            })
+            .catch(err => {
+                loading.style.display = 'none';
+                console.error(err);
+                showPopup("Server error occurred.");
+            });
+    });
+
+    document.getElementById("togglePassword").addEventListener("click", function () {
+        const passwordInput = document.getElementById("password");
+        const eyeIcon = document.getElementById("eyeIcon");
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            eyeIcon.classList.remove("fa-eye");
+            eyeIcon.classList.add("fa-eye-slash");
+        } else {
+            passwordInput.type = "password";
+            eyeIcon.classList.remove("fa-eye-slash");
+            eyeIcon.classList.add("fa-eye");
+        }
+    });
+
+    function showPopup(message) {
+        popupMessage.innerText = message;
+        popup.classList.remove('hidden');
+        setTimeout(() => {
+            popup.classList.add('hidden');
+        }, 3000);
+    }
+</script>
+
+
+    <!-- Optional: Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
